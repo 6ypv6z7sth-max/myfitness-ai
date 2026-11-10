@@ -1,5 +1,5 @@
 /* MyFitness AI – resilient PWA update worker; application data is never touched. */
-const CACHE = 'myfitness-ai-shell-162';
+const CACHE = 'myfitness-ai-shell-163';
 const APP_ROOT = new URL('./', self.registration.scope);
 const APP_HTML = new URL('index.html', APP_ROOT).href;
 self.addEventListener('install', event => {
