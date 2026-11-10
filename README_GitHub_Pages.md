@@ -1,39 +1,39 @@
-# MyFitness AI v1.5 – kombiniertes Update 1.3 + 1.4 + 1.5
+# MyFitness AI v1.5.1 – Installation und Abnahme
 
-## Neu in 1.3: Ernährung Professional
-- Mahlzeiten bearbeiten und löschen.
-- Mahlzeiten als Favoriten speichern und erneut übernehmen.
-- Tagesziele für Kalorien, Eiweiß, Fett und Kohlenhydrate.
-- Wochenübersicht und Kaloriendiagramm.
-- Bestehende Einträge bleiben im bisherigen Speicherformat `myfitness-ai-v01`.
+## Enthalten
+- Alle bisherigen Bereiche der v1.5 mit unverändertem localStorage-Schlüssel `myfitness-ai-v01`.
+- Reparierter Button **Lokal schätzen**: ungefähr 20 Lebensmittel, Portionsmengen (g/kg/ml), Erkennung kombinierter Angaben (z. B. `200 g Hühnerbrust, 150 g Reis`), Hinweis auf unbekannte Zutaten, Aktualisierung aller vier Nährwertfelder.
+- **Mit KI schätzen (optional)**: Schnittstelle zu einem selbst betriebenen, authentifizierten HTTPS-Dienst. Ohne diesen Server keine echte KI-Schätzung. Die App enthält keine API-Schlüssel und keinen fertigen KI-Server. Die Mahlzeitenbeschreibung wird nur nach Bestätigung gesendet.
+- JSON-Import mit Dateigrößenlimit, Datenstruktur-/Werteprüfung, Bestätigungsdialog und Speicherung vor Änderung des aktiven Datenbestands. **Der Import ersetzt weiterhin den gesamten lokalen Datenbestand, kein Merge.**
+- Service-Worker-Cache `myfitness-ai-v1-5-1` und explizite Update-Prüfung.
 
-## Neu in 1.4: Fortschritt & Coach
-- Gewichtskurve für 7, 30, 90 Tage oder alle Einträge.
-- Gewichtsveränderung im ausgewählten Zeitraum.
-- Wochenkennzahlen zu Ernährung und Trainings.
-- Regelbasierte Hinweise aus gespeicherten Werten (keine echte KI/medizinische Diagnose).
-- Training Professional aus Version 1.2 bleibt erhalten.
+## Update auf GitHub Pages
+1. In der bisherigen App ein JSON-Backup exportieren und sicher in iCloud Drive speichern.
+2. ZIP auf PC entpacken, alle enthaltenen Dateien/Ordner ins öffentliche Repository `myfitness-ai` in den Repository-Root hochladen und die vorhandenen Dateien ersetzen. `index.html`, `sw.js`, `manifest.webmanifest` müssen im Root liegen; Icons in `icons/`.
+3. Commit Changes; GitHub Pages auf `main` und `/(root)` belassen.
+4. Nach dem Deployment App in Safari öffnen, Version v1.5.1 prüfen, bestehende Daten prüfen. Keine Website-Daten löschen.
 
-## Neu in 1.5: Backup und Gerätewechsel
-- JSON-Export/Import bleibt verfügbar.
-- Sichtbare Diagnose des lokalen Speichers.
-- Backup-Erinnerung nach 7 Tagen; Anzeige des letzten ausgelösten Exports.
-- Dokumentierter manueller Transfer über iCloud Drive zwischen Geräten.
+## Lokale Schätzung testen
+Beschreibung `200 g Hühnerbrust, 150 g Reis`, dann **Lokal schätzen**. Erwartete Näherung: 525 kcal, 66,05 g Eiweiß, 7,65 g Fett, 42 g Kohlenhydrate. Werte sind vereinfachte Durchschnittswerte und können je nach Zubereitung abweichen.
+Unbekanntes Lebensmittel eingeben und auf eine verständliche Fehlermeldung prüfen.
 
-**Wichtige technische Grenze:** GitHub Pages ist statisches Hosting. Eine automatische Synchronisierung zwischen iPhone, PC und iCloud ist in diesem Paket NICHT implementiert. Dafür braucht es einen authentifizierten Cloud-Dienst (z. B. Apple CloudKit mit Developer-Konfiguration) und eine Konflikt-/Synchronisationslogik. JSON-Import ersetzt die lokalen Daten; es ist kein automatisches Zusammenführen.
+## Optionale KI-Anbindung – Schnittstellenvertrag
+Eine vom Betreiber bereitgestellte, **geschützte** HTTPS-URL in das Feld `KI-Dienst-URL` eingeben. Der Server muss Authentifizierung, Zugriffsbegrenzung, CORS für die GitHub-Pages-Origin, Datenschutz und sichere serverseitige Verwahrung des KI-API-Schlüssels bereitstellen. Keine Zugangsdaten in der URL hinterlegen. Die App sendet nach ausdrücklicher Bestätigung:
 
-## Update-Anleitung
-1. Auf dem iPhone die bisherige HTTPS-Web-App öffnen und über Dashboard ein JSON-Backup exportieren; Backup in iCloud Drive speichern.
-2. Das ZIP-Paket auf Windows entpacken. Die **Dateien und Ordner aus dem Paket** (nicht die ZIP-Datei) in das GitHub-Repository `myfitness-ai` hochladen. Bestehende Dateien ersetzen. `index.html` muss im Repository-Hauptverzeichnis liegen, die drei Icons unter `icons/`.
-3. Änderungen committen; GitHub Pages veröffentlicht automatisch aus `main` und `/(root)`.
-4. Die bekannte App-Adresse in Safari öffnen und auf Version v1.5 im Kopf prüfen. Gegebenenfalls Seite neu laden; der Service-Worker-Cache wurde auf `myfitness-ai-v1-5` geändert.
-5. Bisherige Daten prüfen, dann Mahlzeit bearbeiten, Favorit anlegen, Ziele speichern, Gewichtsfilter und Coach testen.
-6. Die Home-Bildschirm-App verwenden, ohne Website-Daten oder App-Speicher zu löschen.
+`POST {"description":"200 g Hühnerbrust, 150 g Reis"}`
 
-## Testumfang
-- JavaScript-Syntaxprüfung mit Node.js bestanden.
-- Automatisierter Chromium-Interaktionstest: Navigation, Mahlzeit hinzufügen/bearbeiten, Favorit, Ziele, Trainingsplan, Training, Gewicht – bestanden, ohne JavaScript-Laufzeitfehler.
-- Persistenz nach Browserneustart auf echtem HTTPS/iPhone ist noch NICHT getestet: Browser-Testumgebung blockiert dauerhaften Storage. Bestehende Daten vor Update unbedingt sichern.
+Erwartete JSON-Antwort:
 
-## Datenschutz
-Die GitHub-Pages-Dateien sind öffentlich, lokale Einträge werden nicht automatisch in GitHub hochgeladen. JSON-Backups enthalten persönliche Daten und sollten geschützt gespeichert werden.
+`{"values":{"kcal":525,"protein":66,"fat":8,"carbs":42}}`
+
+Die Anfrage nutzt Browser-Cookies (`credentials: include`), weshalb der Dienst passende SameSite-/CORS-Einstellungen braucht. Es ist noch kein KI-Backend bereitgestellt. **Die URL ist eine Integrationsschnittstelle, keine aktive KI-Funktion.**
+
+## Datensicherung und Sicherheit
+- Ein Backup **vor jedem Update und vor jedem Import** exportieren.
+- Import nur mit eigenen vertrauenswürdigen JSON-Dateien; niemals fremde Backups laden.
+- Die Prüfung umfasst Grundstruktur und Werte, aber nicht alle denkbaren semantischen Fehler in älteren Trainingsdaten.
+- Der JSON-Import wurde nicht auf einem realen iPhone getestet; erst mit Testdaten auf einem separaten Browserprofil ausprobieren.
+- Synchronisierung zwischen iPhone und PC ist weiterhin nur manuell über JSON möglich.
+
+## Technische Prüfungen
+JavaScript-Syntaxprüfung (Node.js) bestanden. Ein vollständiger End-to-End-Test auf einem echten iPhone und ein produktiver KI-Server-Test wurden nicht durchgeführt.
