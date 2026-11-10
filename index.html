@@ -191,7 +191,22 @@ window.addEventListener('error',e=>{let el=$('errorbar');el.style.display='block
 </script><script>
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){reg.update().catch(function(){});}).catch(function(e){console.warn('Offline-Funktion nicht verfügbar:',e)});
+    navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(function(reg){
+      reg.update().catch(function(){});
+      var btn=document.createElement('button');
+      btn.type='button';btn.textContent='App-Version prüfen / aktualisieren';
+      btn.style.cssText='display:block;margin:10px auto;padding:10px 14px;background:#245b73;color:white;border:1px solid #8cb6c5;border-radius:10px';
+      btn.onclick=async function(){
+        btn.disabled=true;btn.textContent='Aktualisierung wird geprüft …';
+        try {
+          await reg.update();
+          if(reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
+          // Bypass the app-shell cache, without touching localStorage.
+          location.replace('./index.html?app_update=151fix2');
+        } catch(e){btn.disabled=false;btn.textContent='Erneut versuchen – '+e.message;}
+      };
+      var header=document.querySelector('header');if(header)header.appendChild(btn);
+    }).catch(function(e){console.warn('Offline-Funktion nicht verfügbar:',e)});
   });
 }
 </script></body></html>
