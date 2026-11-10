@@ -1,31 +1,39 @@
-# MyFitness AI – Installation über GitHub Pages
+# MyFitness AI v1.5 – kombiniertes Update 1.3 + 1.4 + 1.5
 
-## 1. Veröffentlichung (am PC)
-1. Bei https://github.com anmelden (kostenloses Konto genügt).
-2. Oben rechts **+** → **New repository**.
-3. Repository beispielsweise `myfitness-ai` nennen und **Public** auswählen. Achtung: Der Programmcode ist dann öffentlich einsehbar. **Create repository**.
-4. **Add file → Upload files**. Alle Inhalte dieses Pakets hochladen: `index.html`, `manifest.webmanifest`, `sw.js`, `.nojekyll` sowie den gesamten Ordner `icons` mit seinen drei PNG-Dateien. GitHub bewahrt die Ordnerstruktur beim Hochladen eines Ordners normalerweise auf. Alternativ die Dateien einzeln mit korrekten Pfaden anlegen.
-5. **Commit changes** auswählen.
-6. **Settings → Pages → Build and deployment**: Source **Deploy from a branch**, Branch **main**, Folder **/(root)** → **Save**.
-7. Einige Minuten warten. Die Website ist anschließend unter `https://DEIN-BENUTZERNAME.github.io/myfitness-ai/` erreichbar. Die genaue URL steht unter **Settings → Pages**.
+## Neu in 1.3: Ernährung Professional
+- Mahlzeiten bearbeiten und löschen.
+- Mahlzeiten als Favoriten speichern und erneut übernehmen.
+- Tagesziele für Kalorien, Eiweiß, Fett und Kohlenhydrate.
+- Wochenübersicht und Kaloriendiagramm.
+- Bestehende Einträge bleiben im bisherigen Speicherformat `myfitness-ai-v01`.
 
-## 2. iPhone installieren
-1. **Nicht** die HTML-Datei aus der Dateien-App öffnen.
-2. Die oben veröffentlichte **https://**-Adresse in **Safari** aufrufen.
-3. Safari **Teilen** → **Zum Home-Bildschirm** → **Hinzufügen**.
-4. Die App über das neue Symbol öffnen. Mahlzeit und Gewicht erfassen, App schließen und wieder öffnen; anschließend prüfen, ob die Einträge erhalten geblieben sind.
+## Neu in 1.4: Fortschritt & Coach
+- Gewichtskurve für 7, 30, 90 Tage oder alle Einträge.
+- Gewichtsveränderung im ausgewählten Zeitraum.
+- Wochenkennzahlen zu Ernährung und Trainings.
+- Regelbasierte Hinweise aus gespeicherten Werten (keine echte KI/medizinische Diagnose).
+- Training Professional aus Version 1.2 bleibt erhalten.
 
-## 3. Windows-PC
-Die gleiche HTTPS-Adresse in Edge oder Chrome öffnen. Daten auf PC und iPhone sind **getrennt**, da nur lokaler Browserspeicher genutzt wird.
+## Neu in 1.5: Backup und Gerätewechsel
+- JSON-Export/Import bleibt verfügbar.
+- Sichtbare Diagnose des lokalen Speichers.
+- Backup-Erinnerung nach 7 Tagen; Anzeige des letzten ausgelösten Exports.
+- Dokumentierter manueller Transfer über iCloud Drive zwischen Geräten.
 
-## 4. Datenschutz und Backups
-- GitHub Pages ist **öffentlich**; keine Passwörter, persönlichen Gesundheitsdaten oder Backup-Dateien in das Repository hochladen.
-- Die Fitnessdaten bleiben normalerweise lokal im Browser/App-Speicher des jeweiligen Geräts und werden **nicht** an GitHub übertragen.
-- In **Dashboard → Datensicherung** regelmäßig **JSON-Backup exportieren** und die Datei z. B. in iCloud Drive speichern. Ein Import überschreibt den bisherigen lokalen Datenbestand.
-- **Keine echte iCloud-Synchronisierung**. Das Löschen von Browser-/Website-Daten oder Neuinstallation kann Einträge entfernen.
-- Vor einem Wechsel der Domain oder eines GitHub-Repositories zuerst Backup erstellen; lokaler Speicher ist an die Website-Adresse gebunden.
+**Wichtige technische Grenze:** GitHub Pages ist statisches Hosting. Eine automatische Synchronisierung zwischen iPhone, PC und iCloud ist in diesem Paket NICHT implementiert. Dafür braucht es einen authentifizierten Cloud-Dienst (z. B. Apple CloudKit mit Developer-Konfiguration) und eine Konflikt-/Synchronisationslogik. JSON-Import ersetzt die lokalen Daten; es ist kein automatisches Zusammenführen.
 
-## 5. Fehlerdiagnose
-- Wenn der gelbe Speicherhinweis erscheint, ist die lokale Speicherung nicht verfügbar; Eingaben gehen nach dem Schließen verloren. Prüfen, dass die App von der HTTPS-Adresse und nicht aus der Dateien-App gestartet wurde.
-- Bei Änderungen an der App: Safari-Seite aktualisieren; eventuell alten Home-Bildschirm-Eintrag entfernen und neu hinzufügen. Vorher Backup sichern.
-- Die automatische Nährwertschätzung ist eine einfache lokale Näherung, **keine** KI-Bilderkennung.
+## Update-Anleitung
+1. Auf dem iPhone die bisherige HTTPS-Web-App öffnen und über Dashboard ein JSON-Backup exportieren; Backup in iCloud Drive speichern.
+2. Das ZIP-Paket auf Windows entpacken. Die **Dateien und Ordner aus dem Paket** (nicht die ZIP-Datei) in das GitHub-Repository `myfitness-ai` hochladen. Bestehende Dateien ersetzen. `index.html` muss im Repository-Hauptverzeichnis liegen, die drei Icons unter `icons/`.
+3. Änderungen committen; GitHub Pages veröffentlicht automatisch aus `main` und `/(root)`.
+4. Die bekannte App-Adresse in Safari öffnen und auf Version v1.5 im Kopf prüfen. Gegebenenfalls Seite neu laden; der Service-Worker-Cache wurde auf `myfitness-ai-v1-5` geändert.
+5. Bisherige Daten prüfen, dann Mahlzeit bearbeiten, Favorit anlegen, Ziele speichern, Gewichtsfilter und Coach testen.
+6. Die Home-Bildschirm-App verwenden, ohne Website-Daten oder App-Speicher zu löschen.
+
+## Testumfang
+- JavaScript-Syntaxprüfung mit Node.js bestanden.
+- Automatisierter Chromium-Interaktionstest: Navigation, Mahlzeit hinzufügen/bearbeiten, Favorit, Ziele, Trainingsplan, Training, Gewicht – bestanden, ohne JavaScript-Laufzeitfehler.
+- Persistenz nach Browserneustart auf echtem HTTPS/iPhone ist noch NICHT getestet: Browser-Testumgebung blockiert dauerhaften Storage. Bestehende Daten vor Update unbedingt sichern.
+
+## Datenschutz
+Die GitHub-Pages-Dateien sind öffentlich, lokale Einträge werden nicht automatisch in GitHub hochgeladen. JSON-Backups enthalten persönliche Daten und sollten geschützt gespeichert werden.
